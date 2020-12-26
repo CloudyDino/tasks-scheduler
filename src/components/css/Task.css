@@ -1,0 +1,9 @@
+li {
+    border-radius: .5em;
+    margin-bottom: .5em;
+}
+
+li div {
+    border-radius: .5em;
+    padding: 2em;
+}

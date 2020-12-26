@@ -6,9 +6,21 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm run dev`
+
+Runs the app in the development mode as an electron app.
+
+### `npm run package`
+
+Will package your application into a platform specific format and put the result in a folder. Please note that this does not make a distributable format. To make proper distributables, please use the make command.
+
+### `npm run make`
+
+Will make distributables for the application based on the Forge config and the parameters passed in.
+
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode on your browser.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
