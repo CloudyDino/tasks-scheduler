@@ -14,7 +14,8 @@ class App extends React.Component {
         "topic2": [],
         "topic3": ["task2", "task3"],
         "topic4": ["task2", "task3", "task2", "task3", "task2", "task3"],
-      }
+      },
+      completed: ["completed task"]
     };
   }
 

@@ -1,9 +1,19 @@
-li {
+.task {
+    cursor: grab;
     border-radius: .5em;
     margin-bottom: .5em;
 }
 
-li div {
+.task-inner {
     border-radius: .5em;
     padding: 2em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.task-action-circle svg {
+    cursor: pointer;
+    padding: .5em;
 }

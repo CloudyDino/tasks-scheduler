@@ -13,6 +13,9 @@ code {
     monospace;
 }
 
+.draggable.dragging {
+  opacity: .75;
+}
 
 @media (prefers-color-scheme: dark) {
     body {

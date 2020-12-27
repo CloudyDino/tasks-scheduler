@@ -12,7 +12,7 @@ export class TopicList extends React.Component {
     }
 
     render() {
-        return <div class='topic-grid'>
+        return <div className="topic-grid">
             {
                 Object.keys(this.props.tasks).map((topic, index) => {
                     return <Topic

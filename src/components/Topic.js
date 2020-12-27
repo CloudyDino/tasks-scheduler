@@ -8,11 +8,11 @@ export class Topic extends React.Component {
     // }
 
     render() {
-        return <div draggable="true" class='topic' style={{backgroundColor: this.props.color}}>
+        return <div className="topic" style={{backgroundColor: this.props.color}}>
             <p>{this.props.topic}</p>
-            <ul>
+            <div className="container">
                 {this.props.tasks.map((note) => <Task note={note} color={this.props.color}/>)}
-            </ul>
+            </div>
         </div>
     }
 }

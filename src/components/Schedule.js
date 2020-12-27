@@ -13,7 +13,7 @@ export class Schedule extends React.Component {
 
     render() {
         return (
-            <ul>
+            <div className="schedule-list container">
                 {
                     this.props.tasks.map((taskString, index) => {
                         return (
@@ -25,7 +25,7 @@ export class Schedule extends React.Component {
                     }
                     )
                 }
-            </ul>
+            </div>
         );
     }
 }
