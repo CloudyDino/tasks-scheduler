@@ -4,9 +4,10 @@ import './index.css';
 import App from './components/App';
 // import reportWebVitals from './reportWebVitals';
 
+const app = <App />;
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {app}
   </React.StrictMode>,
   document.getElementById('root')
 );
@@ -39,6 +40,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
       if (afterElement != null) {
         container.insertBefore(draggable, afterElement);
       } else {
+        // if (container.classList.contains('schedule-list')) {
+        //   app.update((state, props) => ({
+        //     schedule: state.schedule.concat(draggable.)
+        //   }));
+        // }
         container.appendChild(draggable);
       }
     });

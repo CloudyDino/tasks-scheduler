@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/Schedule.css';
-import { randomColor } from '../colors';
+import { randomColor } from '../util/colors';
 import { Task } from './Task';
 
 export class Schedule extends React.Component {

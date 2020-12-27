@@ -2,6 +2,7 @@ import React from 'react';
 import './css/App.css';
 import { Schedule } from "./Schedule";
 import { TopicList } from "./TopicList";
+import store from '../util/storage';
 
 
 class App extends React.Component {
@@ -17,6 +18,12 @@ class App extends React.Component {
       },
       completed: ["completed task"]
     };
+
+    this.update = this.update.bind(this);
+  }
+
+  update(updateFunction) {
+    this.setState(updateFunction);
   }
 
   render() {

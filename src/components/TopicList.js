@@ -1,5 +1,5 @@
 import React from 'react';
-import { randomColor } from '../colors';
+import { randomColor } from '../util/colors';
 import './css/TopicList.css';
 import { Topic } from './Topic';
 

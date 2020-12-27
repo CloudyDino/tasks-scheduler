@@ -1,6 +1,9 @@
 .task {
     cursor: grab;
     border-radius: .5em;
+}
+
+.task:not(:last-child) {
     margin-bottom: .5em;
 }
 
@@ -13,7 +16,18 @@
     justify-content: space-between;
 }
 
-.task-action-circle svg {
+.task-action {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.1s, visibility 0.1s;
+}
+
+.task:hover .task-action {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.1s, visibility 0.1s;}
+
+.task-action svg {
     cursor: pointer;
     padding: .5em;
 }

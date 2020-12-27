@@ -6,11 +6,11 @@
   padding: 0;
   height: 100vh;
   width: 100vw;
+  scrollbar-color: rgb(68, 77, 86) transparent;
 }
 
 #schedule, #tasks {
   overflow-y: scroll;
-  scrollbar-color: rgb(68, 77, 86) transparent;
   padding: 2em;
 }
 

@@ -1,9 +1,20 @@
 .topic {
-    cursor: grab;
-    padding: 1em;
+    padding: .5em;
     border-radius: .5em;
 }
 
 .topic .container {
-    height: 100%;
+    padding: .5em;
+    min-height: 2em;
+    max-height: 70vh;
+    overflow: auto;
+}
+
+.topic .add-task-button {
+    cursor: pointer;
+    padding: 1em 3em;
+    border-radius: .5em;
+    background-color: #ffffff20;
+    width: fit-content;
+    margin: .5em auto 0 auto;
 }
