@@ -1,8 +1,6 @@
-const Store = require('electron-store');
+import Store from 'electron-store'
 
 const schema = {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-
     "definitions": {
         "task": {
             "type": "object",
@@ -24,22 +22,20 @@ const schema = {
         }
     },
 
-    "type": "object",
-
     "properties": {
-        "tasks": {
-            "type": "array",
-            "items": { "type": "#/definitions/task" }
+        "tasks": {  // mapping of task uuids to tasks
+            "type": "object",
+            "additionalProperties": { "type": "#/definitions/task" }
         },
-        "schedule": {
+        "schedule": {   // list of task uuids
             "type": "array",
-            "items": { "type": "string" }   // task uuids
+            "items": { "type": "string" }
         },
-        "topics": {
-            "type": "array",
-            "items": { "type": "#/definitions/topic" }
+        "topics": { // mapping of topic uuids to topics
+            "type": "object",
+            "additionalProperties": { "type": "#/definitions/topic" }
         }
     }
 };
 
-export default store = new Store({ schema });
+export const store = new Store({ schema });

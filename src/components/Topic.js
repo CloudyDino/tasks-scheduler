@@ -1,37 +1,53 @@
 import React from 'react';
+import AddTaskButton from './AddTaskButton';
 import './css/Topic.css'
 import { Task } from './Task';
 
 export class Topic extends React.Component {
-
     constructor(props) {
         super(props);
-        this.state = {
-            topic: this.props.topic,
-            color: this.props.color,
-            tasks: this.props.tasks
-        };
 
-        this.createTask = this.createTask.bind(this);
+        this.state = {
+            "addTask": false
+        }
+
+        this.addTaskKeyDown = this.addTaskKeyDown.bind(this);
+        this.addTask = this.addTask.bind(this);
     }
 
-    createTask() {
-        var note = prompt("Enter task");
+    addTask() {
+        this.setState({ "addTask": true });
+    }
 
-        this.setState((state, props) => ({
-            tasks: state.tasks.concat(note)
-        }))
+    createTask(note) {
+        this.props.createTask(note, this.props.topic.uuid);
+    }
+
+    addTaskKeyDown(event) {
+        if ("Enter" === event.key) {
+            event.preventDefault();
+            let text = document.querySelector(".add-task-text").value;
+            this.setState({ "addTask": false });
+            this.createTask(text);
+        } else if ("Escape" === event.key) {
+            event.stopPropagation()
+            this.setState({ "addTask": false });
+        }
     }
 
     render() {
-        return <div className="topic" style={{ backgroundColor: this.props.color }}>
-            <p>{this.state.topic}</p>
+        return <div className="topic" style={{ backgroundColor: this.props.topic.color }}>
+            <p>{this.props.topic.name}</p>
             <div className="container">
-                {this.state.tasks.map((note) => <Task note={note} color={this.state.color} />)}
+                {Object.keys(this.props.tasks).filter(task_uuid => this.props.tasks[task_uuid].topic_uuid === this.props.topic.uuid).map(task_uuid => <Task key={task_uuid} task={this.props.tasks[task_uuid]} deleteNote={this.props.deleteNote} />)}
+                {this.state.addTask ?
+                    <div className="task">
+                        <div className="task-inner">
+                            <textarea className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} />
+                        </div>
+                    </div> : ''}
             </div>
-            <div className="add-task-button" onClick={this.createTask}>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><line x1="10" y1="2" x2="10" y2="18"></line><line x1="18" y1="10" x2="2" y2="10"></line></svg>
-            </div>
+            <AddTaskButton onClick={this.addTask} />
         </div>
     }
 }

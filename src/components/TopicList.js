@@ -1,24 +1,19 @@
 import React from 'react';
-import { randomColor } from '../util/colors';
 import './css/TopicList.css';
 import { Topic } from './Topic';
 
 export class TopicList extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            colors: Object.keys(this.props.tasks).map(it => randomColor())
-        }
-    }
 
     render() {
         return <div className="topic-grid">
             {
-                Object.keys(this.props.tasks).map((topic, index) => {
+                Object.keys(this.props.topics).map((topic_uuid, index) => {
                     return <Topic
-                        topic={topic}
-                        tasks={this.props.tasks[topic]}
-                        color={this.state.colors[index]}
+                        key={topic_uuid}
+                        topic={this.props.topics[topic_uuid]}
+                        tasks={this.props.tasks}
+                        createTask={this.props.createTask}
+                        deleteNote={this.props.deleteNote}
                     />
                   })
             }

@@ -2,43 +2,77 @@ import React from 'react';
 import './css/App.css';
 import { Schedule } from "./Schedule";
 import { TopicList } from "./TopicList";
-import store from '../util/storage';
+import { store } from '../util/storage';
+import uuid from '../util/uuid'
 
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      schedule: ["task10", "task11", "task12", "task13", "task14", "task15", "task16", "task17", "task18", "task19", "task20"],
-      topic: {
-        "topic1": ["task2", "task3"],
-        "topic2": [],
-        "topic3": ["task2", "task3"],
-        "topic4": ["task2", "task3", "task2", "task3", "task2", "task3"],
-      },
-      completed: ["completed task"]
-    };
+    this.state = store.store;
 
-    this.update = this.update.bind(this);
+    this.createTask = this.createTask.bind(this);
+    this.deleteNote = this.deleteNote.bind(this);
   }
 
-  update(updateFunction) {
-    this.setState(updateFunction);
+  componentDidUpdate() {
+    store.store = this.state;
+  }
+
+  createTask(note, topic_uuid) {
+    const task = {
+      "uuid": uuid(),
+      "topic_uuid": topic_uuid,
+      "note": note
+    }
+    this.setState((prevState) => {
+      let tasks = { ...prevState.tasks };
+      tasks[task.uuid] = task;
+
+      return ({
+        "tasks": tasks,
+        "schedule": topic_uuid != null ? prevState.schedule : prevState.schedule.concat(task.uuid)
+      });
+    });
+  }
+
+  deleteNote(task_uuid) {
+    this.setState(prevState => {
+      const tasks = Object.assign({}, this.state.tasks);
+      delete tasks[task_uuid];
+
+      var schedule = [...this.state.schedule];
+      var index = schedule.indexOf(task_uuid);
+      if (index !== -1) {
+        schedule.splice(index, 1);
+      }
+
+      return ({
+        "tasks": tasks,
+        "schedule": schedule
+      });
+    });
   }
 
   render() {
     return (
       <div className="App">
-        <div id="schedule">
+        <div id="schedule" className="scroll-enabled">
           <h1>Schedule</h1>
           <Schedule
-            tasks={this.state.schedule}
+            tasks={this.state.tasks}
+            schedule={this.state.schedule}
+            createTask={this.createTask}
+            deleteNote={this.deleteNote}
           />
         </div>
-        <div id="tasks">
+        <div id="tasks" className="scroll-enabled">
           <h1>Tasks</h1>
           <TopicList
-            tasks={this.state.topic}
+            tasks={this.state.tasks}
+            topics={this.state.topics}
+            createTask={this.createTask}
+            deleteNote={this.deleteNote}
           />
         </div>
       </div>

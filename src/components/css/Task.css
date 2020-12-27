@@ -8,6 +8,7 @@
 }
 
 .task-inner {
+    background-color: #ffffff20;
     border-radius: .5em;
     padding: 2em;
     display: flex;
