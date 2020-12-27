@@ -1,9 +1,5 @@
 .task {
-    cursor: grab;
     border-radius: .5em;
-}
-
-.task:not(:last-child) {
     margin-bottom: .5em;
 }
 

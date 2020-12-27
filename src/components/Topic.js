@@ -1,4 +1,5 @@
 import React from 'react';
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 import AddTaskButton from './AddTaskButton';
 import './css/Topic.css'
 import { Task } from './Task';
@@ -38,15 +39,31 @@ export class Topic extends React.Component {
     render() {
         return <div className="topic" style={{ backgroundColor: this.props.topic.color }}>
             <p>{this.props.topic.name}</p>
-            <div className="container">
-                {Object.keys(this.props.tasks).filter(task_uuid => this.props.tasks[task_uuid].topic_uuid === this.props.topic.uuid).map(task_uuid => <Task key={task_uuid} task={this.props.tasks[task_uuid]} deleteNote={this.props.deleteNote} />)}
-                {this.state.addTask ?
-                    <div className="task">
-                        <div className="task-inner">
-                            <textarea className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} />
-                        </div>
-                    </div> : ''}
-            </div>
+            <Droppable droppableId={this.props.topic.uuid}>
+                {(provided) => (
+                    <div className="container scroll-enabled" {...provided.droppableProps} ref={provided.innerRef}>
+                        {Object.keys(this.props.tasks).filter(task_uuid => this.props.tasks[task_uuid].topic_uuid === this.props.topic.uuid).map((task_uuid, index) =>
+                            <Draggable key={task_uuid} draggableId={task_uuid} index={index}>
+                                {(provided) => (
+                                    <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                        <Task
+                                            task={this.props.tasks[task_uuid]}
+                                            deleteNote={this.props.deleteNote}
+                                        />
+                                    </div>
+                                )}
+                            </Draggable>
+                        )}
+                        {provided.placeholder}
+                        {this.state.addTask ?
+                            <div className="task">
+                                <div className="task-inner">
+                                    <textarea className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} />
+                                </div>
+                            </div> : ''}
+                    </div>
+                )}
+            </Droppable>
             <AddTaskButton onClick={this.addTask} />
         </div>
     }

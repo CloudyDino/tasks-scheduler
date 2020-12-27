@@ -2,6 +2,7 @@ import React from 'react';
 import './css/Schedule.css';
 import { Task } from './Task';
 import AddTaskButton from './AddTaskButton'
+import { Draggable, Droppable } from 'react-beautiful-dnd';
 
 export class Schedule extends React.Component {
     constructor(props) {
@@ -34,30 +35,37 @@ export class Schedule extends React.Component {
             this.setState({ "addTask": false });
         }
     }
-    
+
     render() {
         return (
             <div>
-                <div className="schedule-list">
-                    {
-                        this.props.schedule.map(task_uuid => {
-                            return (
-                                <Task
-                                    key={task_uuid}
-                                    task={this.props.tasks[task_uuid]}
-                                    deleteNote={this.props.deleteNote}
-                                />
-                            )
-                        }
-                        )
-                    }
-                    {this.state.addTask ?
-                    <div className="task">
-                        <div className="task-inner">
-                            <textarea className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} />
+                <Droppable droppableId="schedule">
+                    {(provided) => (
+                        <div className="schedule-list" {...provided.droppableProps} ref={provided.innerRef}>
+                            {
+                                this.props.schedule.map((task_uuid, index) => (
+                                    <Draggable key={task_uuid} draggableId={task_uuid + 'schedule'} index={index}>
+                                        {(provided) => (
+                                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                                <Task
+                                                    task={this.props.tasks[task_uuid]}
+                                                    deleteNote={this.props.deleteNote}
+                                                />
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))
+                            }
+                            {provided.placeholder}
+                            {this.state.addTask ?
+                                <div className="task">
+                                    <div className="task-inner">
+                                        <textarea className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} />
+                                    </div>
+                                </div> : ''}
                         </div>
-                    </div> : ''}
-                </div>
+                    )}
+                </Droppable>
                 <AddTaskButton onClick={this.addTask} />
             </div>
         );
