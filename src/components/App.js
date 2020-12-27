@@ -18,8 +18,6 @@ class App extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("updated state");
-    console.log(this.state);
     store.store = this.state;
   }
 
@@ -61,10 +59,8 @@ class App extends React.Component {
   reorderScheduledTask(startIndex, endIndex) {
     this.setState(state => {
       let schedule = [...state.schedule];
-      console.log(schedule);
       const [reorderedItem] = schedule.splice(startIndex, 1);
       schedule.splice(endIndex, 0, reorderedItem);
-      console.log(schedule);
 
       return ({
         "schedule": schedule
@@ -73,10 +69,29 @@ class App extends React.Component {
   }
 
   handleOnDragEnd(result) {
-    if (result.source.droppableId === "schedule" && result.destination.droppableId === "schedule") {
-      this.reorderScheduledTask(result.source.index, result.destination.index);
+    if (!result.destination) return;
+
+    if (result.source.droppableId === "schedule") {
+      const task_uuid = result.draggableId.slice('schedule:'.length);
+      if (result.destination.droppableId === "schedule") {
+        this.reorderScheduledTask(result.source.index, result.destination.index);
+      } else {
+        // TODO: remove from schedule
+
+        if (this.state.tasks[task_uuid].topic === result.destination.droppableId) {
+          // TODO: reorder within topic
+        } else {
+          // Add to new topic and remove from old topic if applicable
+        }
+      }
     } else {
-      console.log("TODO");
+      if (result.destination.droppableId === "schedule") {
+        // TODO: add it to schedule
+      } else if (result.source.droppableId === result.destination.droppableId) {
+        // TODO: reorder within topic
+      } else {
+        // TODO: Move to different topic
+      }
     }
   }
 

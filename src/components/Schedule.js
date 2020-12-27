@@ -44,7 +44,7 @@ export class Schedule extends React.Component {
                         <div className="schedule-list" {...provided.droppableProps} ref={provided.innerRef}>
                             {
                                 this.props.schedule.map((task_uuid, index) => (
-                                    <Draggable key={task_uuid} draggableId={task_uuid + 'schedule'} index={index}>
+                                    <Draggable key={task_uuid} draggableId={'schedule:' + task_uuid} index={index}>
                                         {(provided) => (
                                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                                 <Task
