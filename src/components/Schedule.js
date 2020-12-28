@@ -49,6 +49,7 @@ export class Schedule extends React.Component {
                                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                                 <Task
                                                     task={this.props.tasks[task_uuid]}
+                                                    color={this.props.tasks[task_uuid].topic_uuid != null ? this.props.topics[this.props.tasks[task_uuid].topic_uuid].color : 'transparent'}
                                                     deleteNote={this.props.deleteNote}
                                                 />
                                             </div>

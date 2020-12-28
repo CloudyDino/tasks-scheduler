@@ -42,7 +42,7 @@ export class Topic extends React.Component {
             <Droppable droppableId={this.props.topic.uuid}>
                 {(provided) => (
                     <div className="container scroll-enabled" {...provided.droppableProps} ref={provided.innerRef}>
-                        {Object.keys(this.props.tasks).filter(task_uuid => this.props.tasks[task_uuid].topic_uuid === this.props.topic.uuid).map((task_uuid, index) =>
+                        {this.props.topic.tasks.map((task_uuid, index) =>
                             <Draggable key={task_uuid} draggableId={task_uuid} index={index}>
                                 {(provided) => (
                                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>

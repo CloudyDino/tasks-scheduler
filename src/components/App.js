@@ -31,9 +31,19 @@ class App extends React.Component {
       let tasks = { ...state.tasks };
       tasks[task.uuid] = task;
 
+      let schedule = [ ...state.schedule ];
+      let topics = JSON.parse(JSON.stringify(state.topics));
+
+      if (topic_uuid != null) {
+        topics[topic_uuid].tasks.push(task.uuid);
+      } else {
+        schedule.push(task.uuid);
+      }
+
       return ({
         "tasks": tasks,
-        "schedule": topic_uuid != null ? state.schedule : state.schedule.concat(task.uuid)
+        "schedule": schedule,
+        "topics": topics
       });
     });
   }
@@ -43,15 +53,34 @@ class App extends React.Component {
       const tasks = Object.assign({}, state.tasks);
       delete tasks[task_uuid];
 
-      var schedule = [...state.schedule];
-      var index = schedule.indexOf(task_uuid);
+      let schedule = [...state.schedule];
+      let index = schedule.indexOf(task_uuid);
       if (index !== -1) {
         schedule.splice(index, 1);
       }
 
+      const topic_uuid = state.tasks[task_uuid].topic_uuid;
+      let topics = JSON.parse(JSON.stringify(state.topics));
+      if (topic_uuid != null) {
+        topics[topic_uuid].tasks.splice(topics[topic_uuid].tasks.indexOf(task_uuid), 1);
+      }
+
       return ({
         "tasks": tasks,
-        "schedule": schedule
+        "schedule": schedule,
+        "topics": topics
+      });
+    });
+  }
+
+  reorderTaskWithinTopic(topic_uuid, startIndex, endIndex) {
+    this.setState(state => {
+      let topics = JSON.parse(JSON.stringify(state.topics));
+      const [reorderedItem] = topics[topic_uuid].tasks.splice(startIndex, 1);
+      topics[topic_uuid].tasks.splice(endIndex, 0, reorderedItem);
+
+      return ({
+        "topics": topics
       });
     });
   }
@@ -68,29 +97,80 @@ class App extends React.Component {
     });
   }
 
+  changeTopic(task_uuid, new_topic_uuid, index) {
+    this.setState(state => {
+      let tasks = JSON.parse(JSON.stringify(state.tasks));
+      let task = tasks[task_uuid];
+      let topics = JSON.parse(JSON.stringify(state.topics));
+
+      if (task.topic_uuid != null) {
+        topics[task.topic_uuid].tasks.splice(topics[task.topic_uuid].tasks.indexOf(task_uuid), 1);
+      }
+
+      tasks[task_uuid].topic_uuid = new_topic_uuid;
+      topics[new_topic_uuid].tasks.splice(index, 0, task_uuid);
+
+      return ({
+        "tasks": tasks,
+        "topics": topics
+      })
+    })
+  }
+
   handleOnDragEnd(result) {
     if (!result.destination) return;
 
     if (result.source.droppableId === "schedule") {
       const task_uuid = result.draggableId.slice('schedule:'.length);
+      const topic_uuid = this.state.tasks[task_uuid].topic_uuid;
+
       if (result.destination.droppableId === "schedule") {
         this.reorderScheduledTask(result.source.index, result.destination.index);
       } else {
-        // TODO: remove from schedule
+        this.setState(state => {
+          let schedule = [...state.schedule];
+          schedule.splice(schedule.indexOf(task_uuid), 1);
 
-        if (this.state.tasks[task_uuid].topic === result.destination.droppableId) {
-          // TODO: reorder within topic
+          return ({
+            "schedule": schedule
+          });
+        });
+
+        if (topic_uuid === result.destination.droppableId) {
+          let startIndex = this.state.topics[topic_uuid].tasks.indexOf(task_uuid);
+          let endIndex = result.destination.index;
+          if (endIndex > startIndex) {
+            endIndex--;
+          }
+          this.reorderTaskWithinTopic(topic_uuid, startIndex, endIndex);
         } else {
-          // Add to new topic and remove from old topic if applicable
+          this.changeTopic(task_uuid, result.destination.droppableId, result.destination.index);
         }
       }
     } else {
+      const task_uuid = result.draggableId;
       if (result.destination.droppableId === "schedule") {
-        // TODO: add it to schedule
+        let startIndex = this.state.schedule.indexOf(task_uuid);
+        let endIndex = result.destination.index;
+        if (startIndex < 0) {
+          this.setState(state => {
+            let schedule = [ ...state.schedule ];
+            schedule.splice(endIndex, 0, task_uuid);
+
+            return ({
+              "schedule": schedule
+            })
+          })
+        } else {
+          if (endIndex > startIndex) {
+            endIndex--;
+          }
+          this.reorderScheduledTask(startIndex, endIndex);
+        }
       } else if (result.source.droppableId === result.destination.droppableId) {
-        // TODO: reorder within topic
+        this.reorderTaskWithinTopic(result.source.droppableId, result.source.index, result.destination.index);
       } else {
-        // TODO: Move to different topic
+        this.changeTopic(task_uuid, result.destination.droppableId, result.destination.index);
       }
     }
   }
@@ -105,6 +185,7 @@ class App extends React.Component {
             <Schedule
               tasks={this.state.tasks}
               schedule={this.state.schedule}
+              topics={this.state.topics}
               createTask={this.createTask}
               deleteNote={this.deleteNote}
             />
