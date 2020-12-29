@@ -67,8 +67,9 @@
         "asar": true,
         "icon": "src/icons/win/icon.ico",
         "ignore": [
-          "/public",
-          "/test"
+          "tasks-scheduler/public",
+          "tasks-scheduler/src",
+          "tasks-scheduler/test"
         ]
       },
       "makers": [
