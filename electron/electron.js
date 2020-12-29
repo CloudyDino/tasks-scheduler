@@ -1,6 +1,6 @@
 const path = require("path");
 
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, Menu } = require("electron");
 const isDev = require("electron-is-dev");
 
 // Conditionally include the dev tools installer to load React Dev Tools
@@ -27,6 +27,7 @@ function createWindow() {
             enableRemoteModule: true
         }
     });
+    Menu.setApplicationMenu(null);
 
     // and load the index.html of the app.
     // win.loadFile("index.html");
