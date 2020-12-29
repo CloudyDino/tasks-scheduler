@@ -58,7 +58,7 @@ export class Topic extends React.Component {
                         {this.state.addTask ?
                             <div className="task">
                                 <div className="task-inner">
-                                    <textarea className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} />
+                                    <textarea autoFocus className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} />
                                 </div>
                             </div> : ''}
                     </div>

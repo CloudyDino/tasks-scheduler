@@ -22,7 +22,8 @@
 .task:hover .task-action {
     visibility: visible;
     opacity: 1;
-    transition: opacity 0.1s, visibility 0.1s;}
+    transition: opacity 0.1s, visibility 0.1s;
+}
 
 .task-action svg {
     cursor: pointer;

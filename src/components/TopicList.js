@@ -15,7 +15,7 @@ export class TopicList extends React.Component {
                         createTask={this.props.createTask}
                         deleteNote={this.props.deleteNote}
                     />
-                  })
+                })
             }
         </div>;
     }

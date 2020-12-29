@@ -31,7 +31,7 @@ class App extends React.Component {
       let tasks = { ...state.tasks };
       tasks[task.uuid] = task;
 
-      let schedule = [ ...state.schedule ];
+      let schedule = [...state.schedule];
       let topics = JSON.parse(JSON.stringify(state.topics));
 
       if (topic_uuid != null) {
@@ -154,7 +154,7 @@ class App extends React.Component {
         let endIndex = result.destination.index;
         if (startIndex < 0) {
           this.setState(state => {
-            let schedule = [ ...state.schedule ];
+            let schedule = [...state.schedule];
             schedule.splice(endIndex, 0, task_uuid);
 
             return ({
