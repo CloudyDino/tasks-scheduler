@@ -27,13 +27,13 @@ const schema = {
             "type": "object",
             "additionalProperties": { "type": "#/definitions/task" }
         },
-        "schedule": {   // list of task uuids
-            "type": "array",
-            "items": { "type": "string" }
-        },
         "topics": { // mapping of topic uuids to topics
             "type": "object",
             "additionalProperties": { "type": "#/definitions/topic" }
+        },
+        "schedule": {   // list of task uuids
+            "type": "array",
+            "items": { "type": "string" }
         }
     }
 };

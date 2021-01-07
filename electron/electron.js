@@ -1,6 +1,6 @@
 const path = require("path");
 
-const { app, BrowserWindow, Menu } = require("electron");
+const { app, BrowserWindow, nativeTheme } = require("electron");
 const isDev = require("electron-is-dev");
 
 // Conditionally include the dev tools installer to load React Dev Tools
@@ -20,14 +20,13 @@ if (require("electron-squirrel-startup")) {
 function createWindow() {
     // Create the browser window.
     const win = new BrowserWindow({
-        width: 800,
-        height: 600,
+        autoHideMenuBar: true,
+        backgroundColor: nativeTheme.shouldUseDarkColors ? '#171a1d' : '#f4f4f4',
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true
         }
     });
-    Menu.setApplicationMenu(null);
 
     // and load the index.html of the app.
     // win.loadFile("index.html");

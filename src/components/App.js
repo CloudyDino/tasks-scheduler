@@ -10,6 +10,11 @@ import { DragDropContext } from 'react-beautiful-dnd';
 class App extends React.Component {
   constructor(props) {
     super(props);
+
+    if (!store.has('tasks')) { store.set('tasks', {}); }
+    if (!store.has('topics')) { store.set('topics', {}); }
+    if (!store.has('schedule')) { store.set('schedule', []); }
+
     this.state = store.store;
 
     this.createTask = this.createTask.bind(this);
