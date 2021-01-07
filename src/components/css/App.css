@@ -42,6 +42,30 @@
   text-align: left;
 }
 
+.add-task-text {
+  background-color: transparent;
+  border: medium none;
+  color: inherit;
+  font-style: inherit;
+  font-variant: inherit;
+  font-weight: inherit;
+  font-stretch: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-size-adjust: inherit;
+  font-kerning: inherit;
+  font-optical-sizing: inherit;
+  font-language-override: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  outline: none;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  resize: none;
+  text-align: center;
+  width: 100%;
+}
+
 .random-background-color {
   border-radius: 1em;
   margin: 1em;

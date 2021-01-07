@@ -14,10 +14,15 @@ export class Topic extends React.Component {
 
         this.addTaskKeyDown = this.addTaskKeyDown.bind(this);
         this.addTask = this.addTask.bind(this);
+        this.stopAddingTask = this.stopAddingTask.bind(this);
     }
 
     addTask() {
         this.setState({ "addTask": true });
+    }
+
+    stopAddingTask() {
+        this.setState({ "addTask": false });
     }
 
     createTask(note) {
@@ -28,11 +33,11 @@ export class Topic extends React.Component {
         if ("Enter" === event.key) {
             event.preventDefault();
             let text = document.querySelector(".add-task-text").value;
-            this.setState({ "addTask": false });
+            document.querySelector(".add-task-text").value = "";
             this.createTask(text);
         } else if ("Escape" === event.key) {
             event.stopPropagation()
-            this.setState({ "addTask": false });
+            this.stopAddingTask();
         }
     }
 
@@ -58,7 +63,7 @@ export class Topic extends React.Component {
                         {this.state.addTask ?
                             <div className="task">
                                 <div className="task-inner">
-                                    <textarea autoFocus className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} />
+                                    <textarea autoFocus className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} onBlur={this.stopAddingTask}/>
                                 </div>
                             </div> : ''}
                     </div>
