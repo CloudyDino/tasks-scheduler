@@ -13,7 +13,7 @@
 }
 
 .scroll-enabled {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .scroll-enabled::-webkit-scrollbar {
@@ -42,7 +42,7 @@
   text-align: left;
 }
 
-.add-task-text {
+.add-task-text, .add-topic-text {
   background-color: transparent;
   border: medium none;
   color: inherit;

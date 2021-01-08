@@ -16,9 +16,15 @@ const schema = {
             "properties": {
                 "uuid": { "type": "string" },
                 "name": { "type": "string" },
-                "color": { "type": "string" }
+                "color": { "type": "string" },
+                "tasks": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
             },
-            "required": ["uuid", "name", "color"]
+            "required": ["uuid", "name", "color", "tasks"]
         }
     },
 

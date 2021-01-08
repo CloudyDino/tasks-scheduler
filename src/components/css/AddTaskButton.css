@@ -1,0 +1,9 @@
+.add-task-button {
+    cursor: pointer;
+    padding: 1em 3em;
+    border-radius: .5em;
+    background-color: #ffffff20;
+    width: fit-content;
+    height: fit-content;
+    margin-top: .5em;
+}

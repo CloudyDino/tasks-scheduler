@@ -3,3 +3,8 @@
     grid-template-columns: 1fr 1fr;
     gap: .5em;
 }
+
+.topic textarea {
+    margin-block-end: 1em;
+    margin-block-start: 1em;
+}

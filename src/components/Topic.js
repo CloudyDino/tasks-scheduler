@@ -1,4 +1,5 @@
 import React from 'react';
+import { randomColor } from '../util/colors';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import AddTaskButton from './AddTaskButton';
 import './css/Topic.css'
@@ -15,6 +16,8 @@ export class Topic extends React.Component {
         this.addTaskKeyDown = this.addTaskKeyDown.bind(this);
         this.addTask = this.addTask.bind(this);
         this.stopAddingTask = this.stopAddingTask.bind(this);
+        this.deleteTopic = this.deleteTopic.bind(this);
+        this.adjustTopicColor = this.adjustTopicColor.bind(this);
     }
 
     addTask() {
@@ -41,6 +44,14 @@ export class Topic extends React.Component {
         }
     }
 
+    deleteTopic() {
+        this.props.deleteTopic(this.props.topic.uuid);
+    }
+
+    adjustTopicColor() {
+        this.props.editTopic(this.props.topic.uuid, this.props.topic.name, randomColor());
+    }
+
     render() {
         return <div className="topic" style={{ backgroundColor: this.props.topic.color }}>
             <p>{this.props.topic.name}</p>
@@ -53,7 +64,7 @@ export class Topic extends React.Component {
                                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                         <Task
                                             task={this.props.tasks[task_uuid]}
-                                            deleteNote={this.props.deleteNote}
+                                            deleteTask={this.props.deleteTask}
                                         />
                                     </div>
                                 )}
@@ -63,13 +74,22 @@ export class Topic extends React.Component {
                         {this.state.addTask ?
                             <div className="task">
                                 <div className="task-inner">
-                                    <textarea autoFocus className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} onBlur={this.stopAddingTask}/>
+                                    <textarea autoFocus className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} onBlur={this.stopAddingTask} rows="1"/>
                                 </div>
                             </div> : ''}
                     </div>
                 )}
             </Droppable>
-            <AddTaskButton onClick={this.addTask} />
+            <div className="topic-actions">
+                <button className="topic-action" onClick={this.adjustTopicColor}>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="9.012" cy="14.313" r="4.313"></circle><circle cx="7.574" cy="4.608" r="3.235"></circle><circle cx="16.2" cy="8.742" r="3.055"></circle><circle cx="2.541" cy="9.461" r="1.797"></circle><circle cx="16.111" cy="15.122" r="1.348"></circle><circle cx="13.415" cy="3.44" r="1.348"></circle></svg>                </button>
+
+                <AddTaskButton onClick={this.addTask} />
+
+                <button className="topic-action" onClick={this.deleteTopic}>
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M6.3,17.439c-.615,0-1.136-.357-1.159-.8L4.476,4.561h11.13l-.663,12.081c-.023.44-.544.8-1.159.8Z"></path><path d="M15.015,5.121l-.63,11.489c0,.069-.217.269-.6.269H6.3c-.384,0-.6-.2-.6-.268L5.067,5.121h9.948M16.2,4H3.884l.695,12.672A1.594,1.594,0,0,0,6.3,18h7.486A1.594,1.594,0,0,0,15.5,16.672L16.2,4Z"></path><path d="M15.476,2H4.524a.739.739,0,0,0-.751.734V3H16.227V2.734A.739.739,0,0,0,15.476,2Z"></path></svg>
+                </button>
+            </div>
         </div>
     }
 }

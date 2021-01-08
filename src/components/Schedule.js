@@ -43,7 +43,7 @@ export class Schedule extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="schedule">
                 <Droppable droppableId="schedule">
                     {(provided) => (
                         <div className="schedule-list" {...provided.droppableProps} ref={provided.innerRef}>
@@ -55,7 +55,7 @@ export class Schedule extends React.Component {
                                                 <Task
                                                     task={this.props.tasks[task_uuid]}
                                                     color={this.props.tasks[task_uuid].topic_uuid != null ? this.props.topics[this.props.tasks[task_uuid].topic_uuid].color : 'transparent'}
-                                                    deleteNote={this.props.deleteNote}
+                                                    deleteTask={this.props.deleteTask}
                                                 />
                                             </div>
                                         )}
@@ -66,7 +66,7 @@ export class Schedule extends React.Component {
                             {this.state.addTask ?
                                 <div className="task">
                                     <div className="task-inner">
-                                        <textarea autoFocus className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} onBlur={this.stopAddingTask}/>
+                                        <textarea autoFocus className="add-task-text" placeholder="Add Task" onKeyDown={this.addTaskKeyDown} onBlur={this.stopAddingTask} rows="1"/>
                                     </div>
                                 </div> : ''}
                         </div>

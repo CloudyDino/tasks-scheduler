@@ -5,6 +5,7 @@ import { TopicList } from "./TopicList";
 import { store } from '../util/storage';
 import uuid from '../util/uuid'
 import { DragDropContext } from 'react-beautiful-dnd';
+import { randomColor } from '../util/colors';
 
 
 class App extends React.Component {
@@ -18,7 +19,10 @@ class App extends React.Component {
     this.state = store.store;
 
     this.createTask = this.createTask.bind(this);
-    this.deleteNote = this.deleteNote.bind(this);
+    this.deleteTask = this.deleteTask.bind(this);
+    this.createTopic = this.createTopic.bind(this);
+    this.editTopic = this.editTopic.bind(this);
+    this.deleteTopic = this.deleteTopic.bind(this);
     this.handleOnDragEnd = this.handleOnDragEnd.bind(this);
   }
 
@@ -53,7 +57,7 @@ class App extends React.Component {
     });
   }
 
-  deleteNote(task_uuid) {
+  deleteTask(task_uuid) {
     this.setState(state => {
       const tasks = Object.assign({}, state.tasks);
       delete tasks[task_uuid];
@@ -69,6 +73,62 @@ class App extends React.Component {
       if (topic_uuid != null) {
         topics[topic_uuid].tasks.splice(topics[topic_uuid].tasks.indexOf(task_uuid), 1);
       }
+
+      return ({
+        "tasks": tasks,
+        "schedule": schedule,
+        "topics": topics
+      });
+    });
+  }
+
+  createTopic(topic, color) {
+    this.setState((state) => {
+      const topic_uuid = uuid();
+      let topics = JSON.parse(JSON.stringify(state.topics));
+
+      topics[topic_uuid] = {
+        "uuid": topic_uuid,
+        "name": topic,
+        "color": color != null ? color : randomColor(),
+        "tasks": []
+      }
+
+      return ({
+        "topics": topics
+      });
+    });
+  }
+
+  editTopic(topic_uuid, name, color) {
+    this.setState((state) => {
+      let topics = JSON.parse(JSON.stringify(state.topics));
+
+      topics[topic_uuid].name = name;
+      topics[topic_uuid].color = color;
+
+      return ({
+        "topics": topics
+      });
+    });
+  }
+
+  deleteTopic(topic_uuid) {
+    this.setState(state => {
+      const tasks = Object.assign({}, state.tasks);
+      const topics = JSON.parse(JSON.stringify(state.topics));
+      let schedule = [...state.schedule];
+
+      topics[topic_uuid].tasks.forEach(task_uuid => {
+        delete tasks[task_uuid];
+
+        let index = schedule.indexOf(task_uuid);
+        if (index !== -1) {
+          schedule.splice(index, 1);
+        }
+      });
+
+      delete topics[topic_uuid];
 
       return ({
         "tasks": tasks,
@@ -192,7 +252,7 @@ class App extends React.Component {
               schedule={this.state.schedule}
               topics={this.state.topics}
               createTask={this.createTask}
-              deleteNote={this.deleteNote}
+              deleteTask={this.deleteTask}
             />
           </div>
           <div id="tasks" className="scroll-enabled">
@@ -201,7 +261,10 @@ class App extends React.Component {
               tasks={this.state.tasks}
               topics={this.state.topics}
               createTask={this.createTask}
-              deleteNote={this.deleteNote}
+              deleteTask={this.deleteTask}
+              createTopic={this.createTopic}
+              editTopic={this.editTopic}
+              deleteTopic={this.deleteTopic}
             />
           </div>
         </DragDropContext>

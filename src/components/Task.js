@@ -11,7 +11,7 @@ export class Task extends React.Component {
 
     deleteTask() {
         console.log("TODO: split into delete and complete");
-        this.props.deleteNote(this.props.task.uuid);
+        this.props.deleteTask(this.props.task.uuid);
     }
 
     render() {

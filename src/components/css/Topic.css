@@ -1,6 +1,9 @@
 .topic {
     padding: .5em;
     border-radius: .5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .topic .container {
@@ -9,11 +12,23 @@
     max-height: 60vh;
 }
 
-.add-task-button {
-    cursor: pointer;
-    padding: 1em 3em;
-    border-radius: .5em;
-    background-color: #ffffff20;
-    width: fit-content;
-    margin: .5em auto 0 auto;
+.topic-actions {
+    display: flex;
+    justify-content: space-around;
+}
+
+.topic-action {
+    background-color: transparent;
+    outline: inherit;
+    border: inherit;
+    color: inherit;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.1s, visibility 0.1s;
+}
+
+.topic:hover .topic-action {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.1s, visibility 0.1s;
 }
