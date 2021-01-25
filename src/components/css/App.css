@@ -8,7 +8,8 @@
   width: 100vw;
 }
 
-#schedule, #tasks {
+#schedule,
+#tasks {
   padding: 2em;
 }
 
@@ -42,7 +43,9 @@
   text-align: left;
 }
 
-.add-task-text, .add-topic-text, .task-date input {
+.add-task-text,
+.add-topic-text,
+.task-date input {
   background-color: transparent;
   border: medium none;
   color: inherit;

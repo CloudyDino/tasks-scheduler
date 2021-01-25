@@ -1,6 +1,6 @@
 # Tasks Scheduler
 
- A To-Do app inspired by Moleskine Actions in order to learn ReactJs and ElectronJs. 
+A To-Do app inspired by Moleskine Actions in order to learn ReactJs and ElectronJs.
 
 ## Install
 

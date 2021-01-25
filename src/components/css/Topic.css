@@ -1,34 +1,34 @@
 .topic {
-    padding: .5em;
-    border-radius: .5em;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .topic .container {
-    padding: .5em;
-    min-height: 2em;
-    max-height: 60vh;
+  padding: 0.5em;
+  min-height: 2em;
+  max-height: 60vh;
 }
 
 .topic-actions {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 .topic-action {
-    background-color: transparent;
-    outline: inherit;
-    border: inherit;
-    color: inherit;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.1s, visibility 0.1s;
+  background-color: transparent;
+  outline: inherit;
+  border: inherit;
+  color: inherit;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.1s, visibility 0.1s;
 }
 
 .topic:hover .topic-action {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.1s, visibility 0.1s;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.1s, visibility 0.1s;
 }

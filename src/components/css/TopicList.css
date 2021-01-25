@@ -1,10 +1,10 @@
 .topic-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: .5em;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5em;
 }
 
 .topic textarea {
-    margin-block-end: 1em;
-    margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-block-start: 1em;
 }

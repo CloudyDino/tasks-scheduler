@@ -1,39 +1,39 @@
 .task {
-    border-radius: .5em;
-    margin-bottom: .5em;
+  border-radius: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .task-inner {
-    background-color: #ffffff20;
-    border-radius: .5em;
-    padding: 2em;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    justify-content: space-between;
+  background-color: #ffffff20;
+  border-radius: 0.5em;
+  padding: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .task-date {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .task-action {
-    background-color: transparent;
-    outline: inherit;
-    border: inherit;
-    color: inherit;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.1s, visibility 0.1s;
+  background-color: transparent;
+  outline: inherit;
+  border: inherit;
+  color: inherit;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.1s, visibility 0.1s;
 }
 
 .task:hover .task-action {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.1s, visibility 0.1s;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.1s, visibility 0.1s;
 }
 
 .task-action svg {
-    cursor: pointer;
-    padding: .5em;
+  cursor: pointer;
+  padding: 0.5em;
 }
