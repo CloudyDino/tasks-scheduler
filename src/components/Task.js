@@ -47,19 +47,18 @@ export class Task extends React.Component {
           </button>
           <div>
             <div className="task-note">{this.props.task.note}</div>
-            <div className="task-date">
-              {this.props.task.date != null ? (
-                <input
-                  type="date"
-                  value={
-                    new Date(this.props.task.date).toISOString().split("T")[0]
-                  }
-                  onChange={this.editDate}
-                />
-              ) : (
-                ""
-              )}
-            </div>
+            {this.props.task.date != null ? (
+              <input
+                className="task-date"
+                type="date"
+                value={
+                  new Date(this.props.task.date).toISOString().split("T")[0]
+                }
+                onChange={this.editDate}
+              />
+            ) : (
+              ""
+            )}
           </div>
           <button
             aria-label="Delete Task"

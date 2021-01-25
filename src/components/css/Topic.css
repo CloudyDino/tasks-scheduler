@@ -12,6 +12,10 @@
   max-height: 60vh;
 }
 
+.container {
+  flex-grow: 1;
+}
+
 .topic-actions {
   display: flex;
   justify-content: space-around;
