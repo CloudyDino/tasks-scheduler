@@ -7,7 +7,8 @@ const schema = {
             "properties": {
                 "uuid": { "type": "string" },
                 "topic_uuid": { "type": "string" },
-                "note": { "type": "string" }
+                "note": { "type": "string" },
+                "date": { "type": "date" }
             },
             "required": ["uuid", "note"]
         },

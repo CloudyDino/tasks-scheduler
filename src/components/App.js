@@ -7,7 +7,6 @@ import uuid from '../util/uuid'
 import { DragDropContext } from 'react-beautiful-dnd';
 import { randomColor } from '../util/colors';
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -19,6 +18,7 @@ class App extends React.Component {
     this.state = store.store;
 
     this.createTask = this.createTask.bind(this);
+    this.editTaskDate = this.editTaskDate.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
     this.createTopic = this.createTopic.bind(this);
     this.editTopic = this.editTopic.bind(this);
@@ -53,6 +53,22 @@ class App extends React.Component {
         "tasks": tasks,
         "schedule": schedule,
         "topics": topics
+      });
+    });
+  }
+
+  editTaskDate(task_uuid, date) {
+    this.setState((state) => {
+      let tasks = { ...state.tasks };
+
+      if (date == null) {
+        delete tasks[task_uuid].date;
+      } else {
+        tasks[task_uuid].date = date;
+      }
+
+      return ({
+        "tasks": tasks
       });
     });
   }
@@ -252,6 +268,7 @@ class App extends React.Component {
               schedule={this.state.schedule}
               topics={this.state.topics}
               createTask={this.createTask}
+              editTaskDate={this.editTaskDate}
               deleteTask={this.deleteTask}
             />
           </div>
@@ -261,6 +278,7 @@ class App extends React.Component {
               tasks={this.state.tasks}
               topics={this.state.topics}
               createTask={this.createTask}
+              editTaskDate={this.editTaskDate}
               deleteTask={this.deleteTask}
               createTopic={this.createTopic}
               editTopic={this.editTopic}

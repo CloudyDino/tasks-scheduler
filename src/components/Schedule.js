@@ -3,6 +3,7 @@ import './css/Schedule.css';
 import { Task } from './Task';
 import AddTaskButton from './AddTaskButton'
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import autosize from 'autosize';
 
 export class Schedule extends React.Component {
     constructor(props) {
@@ -38,6 +39,8 @@ export class Schedule extends React.Component {
         } else if ("Escape" === event.key) {
             event.stopPropagation()
             this.stopAddingTask();
+        } else {
+            autosize(document.querySelector(".add-task-text"));
         }
     }
 
@@ -55,6 +58,7 @@ export class Schedule extends React.Component {
                                                 <Task
                                                     task={this.props.tasks[task_uuid]}
                                                     color={this.props.tasks[task_uuid].topic_uuid != null ? this.props.topics[this.props.tasks[task_uuid].topic_uuid].color : 'transparent'}
+                                                    editTaskDate={this.props.editTaskDate}
                                                     deleteTask={this.props.deleteTask}
                                                 />
                                             </div>

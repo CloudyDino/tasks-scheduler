@@ -4,6 +4,7 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 import AddTaskButton from './AddTaskButton';
 import './css/Topic.css'
 import { Task } from './Task';
+import autosize from 'autosize';
 
 export class Topic extends React.Component {
     constructor(props) {
@@ -41,6 +42,8 @@ export class Topic extends React.Component {
         } else if ("Escape" === event.key) {
             event.stopPropagation()
             this.stopAddingTask();
+        } else {
+            autosize(document.querySelector(".add-task-text"));
         }
     }
 
@@ -64,6 +67,7 @@ export class Topic extends React.Component {
                                     <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                                         <Task
                                             task={this.props.tasks[task_uuid]}
+                                            editTaskDate={this.props.editTaskDate}
                                             deleteTask={this.props.deleteTask}
                                         />
                                     </div>
@@ -81,12 +85,12 @@ export class Topic extends React.Component {
                 )}
             </Droppable>
             <div className="topic-actions">
-                <button className="topic-action" onClick={this.adjustTopicColor}>
+                <button aria-label="Change Topic Color" className="topic-action" onClick={this.adjustTopicColor}>
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><circle cx="9.012" cy="14.313" r="4.313"></circle><circle cx="7.574" cy="4.608" r="3.235"></circle><circle cx="16.2" cy="8.742" r="3.055"></circle><circle cx="2.541" cy="9.461" r="1.797"></circle><circle cx="16.111" cy="15.122" r="1.348"></circle><circle cx="13.415" cy="3.44" r="1.348"></circle></svg>                </button>
 
                 <AddTaskButton onClick={this.addTask} />
 
-                <button className="topic-action" onClick={this.deleteTopic}>
+                <button aria-label="Delete Topic" className="topic-action" onClick={this.deleteTopic}>
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M6.3,17.439c-.615,0-1.136-.357-1.159-.8L4.476,4.561h11.13l-.663,12.081c-.023.44-.544.8-1.159.8Z"></path><path d="M15.015,5.121l-.63,11.489c0,.069-.217.269-.6.269H6.3c-.384,0-.6-.2-.6-.268L5.067,5.121h9.948M16.2,4H3.884l.695,12.672A1.594,1.594,0,0,0,6.3,18h7.486A1.594,1.594,0,0,0,15.5,16.672L16.2,4Z"></path><path d="M15.476,2H4.524a.739.739,0,0,0-.751.734V3H16.227V2.734A.739.739,0,0,0,15.476,2Z"></path></svg>
                 </button>
             </div>

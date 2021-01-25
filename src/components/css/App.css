@@ -42,7 +42,7 @@
   text-align: left;
 }
 
-.add-task-text, .add-topic-text {
+.add-task-text, .add-topic-text, .task-date input {
   background-color: transparent;
   border: medium none;
   color: inherit;
