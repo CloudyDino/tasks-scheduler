@@ -91,18 +91,18 @@ export class Task extends React.Component {
             </svg>
           </button>
           <div className="task-inner-main">
-          {this.state.editing ? (
+            {this.state.editing ? (
               <textarea
-              autoFocus
-              className="add-task-text"
-              placeholder="Add Task"
-              onKeyDown={this.editTaskKeyDown}
-              onBlur={this.cancelEditingTask}
-              defaultValue={
-                this.state.new === false ? this.props.task.note : ""
-              }
-              rows={this.state.new === true ? "1" : ""}
-            />
+                autoFocus
+                className="add-task-text"
+                placeholder="Add Task"
+                onKeyDown={this.editTaskKeyDown}
+                onBlur={this.cancelEditingTask}
+                defaultValue={
+                  this.state.new === false ? this.props.task.note : ""
+                }
+                rows={this.state.new === true ? "1" : ""}
+              />
             ) : (
               <div
                 onDoubleClick={() => {
