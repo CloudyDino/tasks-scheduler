@@ -4,17 +4,17 @@ export default function AddTopicButton(props) {
   return (
     <div className="add-topic-button" onClick={props.onClick}>
       <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
+        width="40"
+        height="40"
+        viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1"
       >
-        <line x1="10" y1="2" x2="10" y2="18" />
-        <line x1="18" y1="10" x2="2" y2="10" />
+        <line x1="1.5" y1="12.5" x2="23.5" y2="12.5"></line>
+        <line x1="12.5" y1="23.5" x2="12.5" y2="1.5"></line>
       </svg>
     </div>
   );
