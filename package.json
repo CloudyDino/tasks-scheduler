@@ -3,7 +3,7 @@
   "productName": "Tasks Scheduler",
   "description": "Offline app to schedule your tasks.",
   "author": "CloudyDino",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "main": "./electron/electron.js",
   "homepage": "./",
   "private": true,

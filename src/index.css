@@ -12,6 +12,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   box-sizing: border-box;
+  background: #171a1d;
+  color: #ffffff;
 }
 
 code {
@@ -19,7 +21,7 @@ code {
     monospace;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   body {
     background: #171a1d;
     color: #ffffff;
@@ -31,4 +33,4 @@ code {
     background: #f4f4f4;
     color: #000000;
   }
-}
+} */
