@@ -18,6 +18,7 @@
 }
 
 .task-date {
+  width: min-content;
   opacity: 0.6;
 }
 
