@@ -1,6 +1,14 @@
+#schedule, .schedule {
+  display: flex;
+  flex-direction: column;
+}
+
+.schedule {
+  flex-grow: 1;
+}
+
 .schedule-list {
-  margin: 0;
-  padding: 0;
+  flex-grow: 1;
   min-height: 2em;
 }
 

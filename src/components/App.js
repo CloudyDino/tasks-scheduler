@@ -24,7 +24,8 @@ class App extends React.Component {
     this.state = store.store;
 
     this.createTask = this.createTask.bind(this);
-    this.editTaskDate = this.editTaskDate.bind(this);
+    this.updateTaskDate = this.updateTaskDate.bind(this);
+    this.updateTaskNote = this.updateTaskNote.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
     this.createTopic = this.createTopic.bind(this);
     this.editTopic = this.editTopic.bind(this);
@@ -37,6 +38,9 @@ class App extends React.Component {
   }
 
   createTask(note, topic_uuid) {
+    if (note === null || note.length === 0) {
+      return;
+    }
     const task = {
       uuid: uuid(),
       topic_uuid,
@@ -63,48 +67,67 @@ class App extends React.Component {
     });
   }
 
-  editTaskDate(task_uuid, date) {
-    this.setState((state) => {
-      const tasks = { ...state.tasks };
+  updateTaskDate(task_uuid, date) {
+    if (task_uuid != null) {
+      this.setState((state) => {
+        const tasks = { ...state.tasks };
 
-      if (date == null) {
-        delete tasks[task_uuid].date;
-      } else {
-        tasks[task_uuid].date = date;
-      }
+        if (date == null) {
+          delete tasks[task_uuid].date;
+        } else {
+          tasks[task_uuid].date = date;
+        }
 
-      return {
-        tasks,
-      };
-    });
+        return {
+          tasks,
+        };
+      });
+    }
+  }
+
+  updateTaskNote(task_uuid, note) {
+    if (note === null || note.length === 0) {
+      this.deleteTask(task_uuid);
+    } else {
+      this.setState((state) => {
+        const tasks = { ...state.tasks };
+        tasks[task_uuid].note = note;
+
+        return {
+          tasks,
+        };
+      });
+    }
   }
 
   deleteTask(task_uuid) {
-    this.setState((state) => {
-      const tasks = { ...state.tasks };
-      delete tasks[task_uuid];
+    if (task_uuid != null) {
+      this.setState((state) => {
+        const tasks = { ...state.tasks };
+        delete tasks[task_uuid];
 
-      const schedule = [...state.schedule];
-      const index = schedule.indexOf(task_uuid);
-      if (index !== -1) {
-        schedule.splice(index, 1);
-      }
+        const schedule = [...state.schedule];
+        const index = schedule.indexOf(task_uuid);
+        if (index !== -1) {
+          schedule.splice(index, 1);
+        }
 
-      const { topic_uuid } = state.tasks[task_uuid];
-      const topics = JSON.parse(JSON.stringify(state.topics));
-      if (topic_uuid != null) {
-        topics[topic_uuid].tasks.splice(
-          topics[topic_uuid].tasks.indexOf(task_uuid),
-          1
-        );
-      }
+        const { topic_uuid } = state.tasks[task_uuid];
+        const topics = JSON.parse(JSON.stringify(state.topics));
+        if (topic_uuid != null) {
+          topics[topic_uuid].tasks.splice(
+            topics[topic_uuid].tasks.indexOf(task_uuid),
+            1
+          );
+        }
 
-      return {
-        tasks,
-        schedule,
-        topics,
-      };
-    });
+        return {
+          tasks,
+          schedule,
+          topics,
+        };
+      });
+    }
   }
 
   createTopic(topic, color) {
@@ -296,7 +319,8 @@ class App extends React.Component {
               schedule={this.state.schedule}
               topics={this.state.topics}
               createTask={this.createTask}
-              editTaskDate={this.editTaskDate}
+              updateTaskDate={this.updateTaskDate}
+              updateTaskNote={this.updateTaskNote}
               deleteTask={this.deleteTask}
             />
           </div>
@@ -306,7 +330,8 @@ class App extends React.Component {
               tasks={this.state.tasks}
               topics={this.state.topics}
               createTask={this.createTask}
-              editTaskDate={this.editTaskDate}
+              updateTaskDate={this.updateTaskDate}
+              updateTaskNote={this.updateTaskNote}
               deleteTask={this.deleteTask}
               createTopic={this.createTopic}
               editTopic={this.editTopic}

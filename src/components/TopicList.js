@@ -55,7 +55,8 @@ export class TopicList extends React.Component {
             topic={this.props.topics[topic_uuid]}
             tasks={this.props.tasks}
             createTask={this.props.createTask}
-            editTaskDate={this.props.editTaskDate}
+            updateTaskDate={this.props.updateTaskDate}
+            updateTaskNote={this.props.updateTaskNote}
             deleteTask={this.props.deleteTask}
             editTopic={this.props.editTopic}
             deleteTopic={this.props.deleteTopic}

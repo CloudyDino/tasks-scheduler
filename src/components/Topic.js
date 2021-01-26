@@ -4,7 +4,6 @@ import { randomColor } from "../util/colors";
 import AddTaskButton from "./AddTaskButton";
 import "./css/Topic.css";
 import { Task } from "./Task";
-import autosize from "autosize";
 
 export class Topic extends React.Component {
   constructor(props) {
@@ -14,8 +13,8 @@ export class Topic extends React.Component {
       addTask: false,
     };
 
-    this.addTaskKeyDown = this.addTaskKeyDown.bind(this);
     this.addTask = this.addTask.bind(this);
+    this.createTask = this.createTask.bind(this);
     this.stopAddingTask = this.stopAddingTask.bind(this);
     this.deleteTopic = this.deleteTopic.bind(this);
     this.adjustTopicColor = this.adjustTopicColor.bind(this);
@@ -31,20 +30,6 @@ export class Topic extends React.Component {
 
   createTask(note) {
     this.props.createTask(note, this.props.topic.uuid);
-  }
-
-  addTaskKeyDown(event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      const text = document.querySelector(".add-task-text").value;
-      document.querySelector(".add-task-text").value = "";
-      this.createTask(text);
-    } else if (event.key === "Escape") {
-      event.stopPropagation();
-      this.stopAddingTask();
-    } else {
-      autosize(document.querySelector(".add-task-text"));
-    }
   }
 
   deleteTopic() {
@@ -87,7 +72,8 @@ export class Topic extends React.Component {
                     >
                       <Task
                         task={this.props.tasks[task_uuid]}
-                        editTaskDate={this.props.editTaskDate}
+                        updateTaskDate={this.props.updateTaskDate}
+                        updateTaskNote={this.props.updateTaskNote}
                         deleteTask={this.props.deleteTask}
                       />
                     </div>
@@ -96,18 +82,10 @@ export class Topic extends React.Component {
               ))}
               {provided.placeholder}
               {this.state.addTask ? (
-                <div className="task">
-                  <div className="task-inner">
-                    <textarea
-                      autoFocus
-                      className="add-task-text"
-                      placeholder="Add Task"
-                      onKeyDown={this.addTaskKeyDown}
-                      onBlur={this.stopAddingTask}
-                      rows="1"
-                    />
-                  </div>
-                </div>
+                <Task
+                  createTask={this.createTask}
+                  onCancel={this.stopAddingTask}
+                />
               ) : (
                 ""
               )}

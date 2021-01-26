@@ -1,32 +1,77 @@
 import React from "react";
 import "./css/Task.css";
+import autosize from "autosize";
 
 export class Task extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      editing: this.props.task === undefined,
+      new: this.props.task === undefined,
+    };
+
     this.toggleDate = this.toggleDate.bind(this);
-    this.editDate = this.editDate.bind(this);
+    this.updateDate = this.updateDate.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
+    this.editTaskKeyDown = this.editTaskKeyDown.bind(this);
+    this.stopEditingTask = this.stopEditingTask.bind(this);
+    this.cancelEditingTask = this.cancelEditingTask.bind(this);
   }
 
   toggleDate() {
     let date = new Date();
-    if (this.props.task.date == null) {
+    if (this.props.task?.date == null) {
       date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     } else {
       date = null;
     }
 
-    this.props.editTaskDate(this.props.task.uuid, date);
+    if (this.props.updateTaskDate !== undefined) {
+      this.props.updateTaskDate(this.props.task?.uuid, date);
+    }
   }
 
-  editDate(event) {
-    this.props.editTaskDate(this.props.task.uuid, event.target.value);
+  updateDate(date) {
+    this.props.updateTaskDate(this.props.task.uuid, date);
+  }
+
+  updateNote(note) {
+    this.props.updateTaskNote(this.props.task.uuid, note);
   }
 
   deleteTask() {
-    this.props.deleteTask(this.props.task.uuid);
+    this.props.deleteTask(this.props.task?.uuid);
+  }
+
+  editTaskKeyDown(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      this.stopEditingTask();
+    } else if (event.key === "Escape") {
+      event.stopPropagation();
+      this.cancelEditingTask();
+    }
+    autosize(document.querySelector(".add-task-text"));
+  }
+
+  stopEditingTask() {
+    const note = document.querySelector(".add-task-text").value;
+    document.querySelector(".add-task-text").value = "";
+    if (this.state.new) {
+      this.props.createTask(note);
+    } else {
+      this.updateNote(note);
+      this.setState({ editing: false });
+    }
+  }
+
+  cancelEditingTask() {
+    if (this.state.new) {
+      this.props.onCancel();
+    } else {
+      this.setState({ editing: false });
+    }
   }
 
   render() {
@@ -45,16 +90,38 @@ export class Task extends React.Component {
               </g>
             </svg>
           </button>
-          <div>
-            <div className="task-note">{this.props.task.note}</div>
-            {this.props.task.date != null ? (
+          <div className="task-inner-main">
+          {this.state.editing ? (
+              <textarea
+              autoFocus
+              className="add-task-text"
+              placeholder="Add Task"
+              onKeyDown={this.editTaskKeyDown}
+              onBlur={this.cancelEditingTask}
+              defaultValue={
+                this.state.new === false ? this.props.task.note : ""
+              }
+              rows={this.state.new === true ? "1" : ""}
+            />
+            ) : (
+              <div
+                onDoubleClick={() => {
+                  this.setState({ editing: true });
+                }}
+              >
+                {this.props.task.note}
+              </div>
+            )}
+            {this.props.task?.date != null ? (
               <input
                 className="task-date"
                 type="date"
                 value={
                   new Date(this.props.task.date).toISOString().split("T")[0]
                 }
-                onChange={this.editDate}
+                onChange={(event) => {
+                  this.updateDate(event.target.value);
+                }}
               />
             ) : (
               ""
@@ -67,8 +134,8 @@ export class Task extends React.Component {
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"

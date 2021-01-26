@@ -60,6 +60,8 @@ input {
   font-language-override: inherit;
   font-feature-settings: inherit;
   font-variation-settings: inherit;
+  margin: 0;
+  padding: 0;
   outline: none;
   overflow: hidden;
   overflow-wrap: break-word;

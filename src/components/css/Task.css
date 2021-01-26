@@ -13,6 +13,10 @@
   justify-content: space-between;
 }
 
+.task-inner-main {
+  flex-grow: 1;
+}
+
 .task-date {
   opacity: 0.6;
 }
