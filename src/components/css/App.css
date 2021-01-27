@@ -13,11 +13,12 @@
 }
 
 #schedule {
-  flex-shrink: 0;
+  min-width: min-content;
+  flex: 1 0 0;
 }
 
 #tasks {
-  flex: 1 1 0;
+  flex: 2 1 0;
 }
 
 .scroll-enabled {
@@ -82,8 +83,16 @@ textarea::placeholder {
   opacity: 0.6;
 }
 
-.random-background-color {
-  border-radius: 1em;
-  margin: 1em;
-  padding: 1em 1.5em;
+.dont-break-out {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }

@@ -108,6 +108,7 @@ export class Task extends React.Component {
                 onDoubleClick={() => {
                   this.setState({ editing: true });
                 }}
+                className="dont-break-out"
               >
                 {this.props.task.note}
               </div>
