@@ -324,8 +324,8 @@ class App extends React.Component {
               deleteTask={this.deleteTask}
             />
           </div>
-          <div id="tasks" className="scroll-enabled">
-            <h1>Tasks</h1>
+          <div id="topics" className="scroll-enabled">
+            <h1>Lists</h1>
             <TopicList
               tasks={this.state.tasks}
               topics={this.state.topics}

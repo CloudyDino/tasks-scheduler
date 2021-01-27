@@ -8,7 +8,7 @@
 }
 
 #schedule,
-#tasks {
+#topics {
   padding: 2em;
 }
 
@@ -17,7 +17,7 @@
   flex: 1 0 0;
 }
 
-#tasks {
+#topics {
   flex: 2 1 0;
 }
 
