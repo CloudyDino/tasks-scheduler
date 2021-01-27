@@ -117,9 +117,7 @@ export class Task extends React.Component {
               <input
                 className="task-date"
                 type="date"
-                value={
-                  new Date(this.props.task.date).toISOString().split("T")[0]
-                }
+                value={this.props.task.date}
                 onChange={(event) => {
                   this.updateDate(event.target.value);
                 }}
