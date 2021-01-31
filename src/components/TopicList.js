@@ -48,36 +48,42 @@ export class TopicList extends React.Component {
 
   render() {
     return (
-      <div className="topic-grid">
-        {Object.keys(this.props.topics).map((topic_uuid, index) => (
-          <Topic
-            key={topic_uuid}
-            topic={this.props.topics[topic_uuid]}
-            tasks={this.props.tasks}
-            createTask={this.props.createTask}
-            updateTaskDate={this.props.updateTaskDate}
-            updateTaskNote={this.props.updateTaskNote}
-            deleteTask={this.props.deleteTask}
-            editTopic={this.props.editTopic}
-            deleteTopic={this.props.deleteTopic}
-          />
-        ))}
-
-        {this.state.addTopic ? (
-          <div className="topic" style={{ backgroundColor: this.state.color }}>
-            <textarea
-              autoFocus
-              className="add-topic-text"
-              placeholder="Add Topic"
-              onKeyDown={this.addTopicKeyDown}
-              onBlur={this.stopAddingTopic}
-              rows="1"
+      <div id="topics" className="scroll-enabled">
+        <h1>Lists</h1>
+        <div className="topic-grid">
+          {this.props.topicsOrder.map((topicUuid, index) => (
+            <Topic
+              key={topicUuid}
+              topic={this.props.topics[topicUuid]}
+              tasks={this.props.tasks}
+              createTask={this.props.createTask}
+              updateTaskDate={this.props.updateTaskDate}
+              updateTaskContent={this.props.updateTaskContent}
+              deleteTask={this.props.deleteTask}
+              updateTopic={this.props.updateTopic}
+              deleteTopic={this.props.deleteTopic}
             />
-          </div>
-        ) : (
-          ""
-        )}
-        <AddTopicButton onClick={this.addTopic} />
+          ))}
+
+          {this.state.addTopic ? (
+            <div
+              className="topic"
+              style={{ backgroundColor: this.state.color }}
+            >
+              <textarea
+                autoFocus
+                className="add-topic-text"
+                placeholder="Add Topic"
+                onKeyDown={this.addTopicKeyDown}
+                onBlur={this.stopAddingTopic}
+                rows="1"
+              />
+            </div>
+          ) : (
+            ""
+          )}
+          <AddTopicButton onClick={this.addTopic} />
+        </div>
       </div>
     );
   }

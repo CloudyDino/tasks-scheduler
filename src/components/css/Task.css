@@ -1,6 +1,9 @@
+.task-container {
+  margin-bottom: 0.5em;
+}
+
 .task {
   border-radius: 0.5em;
-  margin-bottom: 0.5em;
   min-width: min-content;
 }
 

@@ -1,7 +1,6 @@
 import React from "react";
 import "./css/Schedule.css";
-import { Draggable, Droppable } from "react-beautiful-dnd";
-import { Task } from "./Task";
+import { TaskList } from "./TaskList";
 import AddTaskButton from "./AddTaskButton";
 
 export class Schedule extends React.Component {
@@ -25,61 +24,26 @@ export class Schedule extends React.Component {
     this.setState({ addTask: false });
   }
 
-  createTask(note) {
-    this.props.createTask(note, null);
+  createTask(content) {
+    this.props.createTask(content, null);
   }
 
   render() {
     return (
-      <div className="schedule">
-        <Droppable droppableId="schedule">
-          {(provided) => (
-            <div
-              className="schedule-list"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {this.props.schedule.map((task_uuid, index) => (
-                <Draggable
-                  key={task_uuid}
-                  draggableId={`schedule:${task_uuid}`}
-                  index={index}
-                >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <Task
-                        task={this.props.tasks[task_uuid]}
-                        color={
-                          this.props.tasks[task_uuid].topic_uuid != null
-                            ? this.props.topics[
-                                this.props.tasks[task_uuid].topic_uuid
-                              ].color
-                            : "transparent"
-                        }
-                        updateTaskDate={this.props.updateTaskDate}
-                        updateTaskNote={this.props.updateTaskNote}
-                        deleteTask={this.props.deleteTask}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-              {this.state.addTask ? (
-                <Task
-                  createTask={this.createTask}
-                  onCancel={this.stopAddingTask}
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          )}
-        </Droppable>
+      <div id="schedule" className="scroll-enabled">
+        <h1>Schedule</h1>
+        <TaskList
+          id="schedule"
+          topics={this.props.topics}
+          tasksOrder={this.props.tasksOrder}
+          tasks={this.props.tasks}
+          createTask={this.props.createTask}
+          updateTaskDate={this.props.updateTaskDate}
+          updateTaskContent={this.props.updateTaskContent}
+          deleteTask={this.props.deleteTask}
+          addTask={this.state.addTask}
+          onCancelAddingTask={this.stopAddingTask}
+        />
         <AddTaskButton onClick={this.addTask} />
       </div>
     );

@@ -7,20 +7,6 @@
   width: 100vw;
 }
 
-#schedule,
-#topics {
-  padding: 2em;
-}
-
-#schedule {
-  min-width: min-content;
-  flex: 1 0 0;
-}
-
-#topics {
-  flex: 2 1 0;
-}
-
 .scroll-enabled {
   overflow-y: auto;
 }

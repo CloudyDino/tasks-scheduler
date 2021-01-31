@@ -6,11 +6,11 @@ const schema = {
       type: "object",
       properties: {
         uuid: { type: "string" },
-        topic_uuid: { type: "string" },
-        note: { type: "string" },
+        topicUuid: { type: "string" },
+        content: { type: "string" },
         date: { type: "date" },
       },
-      required: ["uuid", "note"],
+      required: ["uuid", "content"],
     },
     topic: {
       type: "object",
@@ -42,6 +42,10 @@ const schema = {
     },
     schedule: {
       // list of task uuids
+      type: "array",
+      items: { type: "string" },
+    },
+    topicOrder: {
       type: "array",
       items: { type: "string" },
     },

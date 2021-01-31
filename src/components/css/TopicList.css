@@ -1,3 +1,8 @@
+#topics {
+  padding: 2em 2em 1em 1em;
+  flex: 2 1 0;
+}
+
 .topic-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

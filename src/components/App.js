@@ -20,15 +20,18 @@ class App extends React.Component {
     if (!store.has("schedule")) {
       store.set("schedule", []);
     }
+    if (!store.has("topicsOrder")) {
+      store.set("topicsOrder", []);
+    }
 
     this.state = store.store;
 
     this.createTask = this.createTask.bind(this);
     this.updateTaskDate = this.updateTaskDate.bind(this);
-    this.updateTaskNote = this.updateTaskNote.bind(this);
+    this.updateTaskContent = this.updateTaskContent.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
     this.createTopic = this.createTopic.bind(this);
-    this.editTopic = this.editTopic.bind(this);
+    this.updateTopic = this.updateTopic.bind(this);
     this.deleteTopic = this.deleteTopic.bind(this);
     this.handleOnDragEnd = this.handleOnDragEnd.bind(this);
   }
@@ -37,14 +40,14 @@ class App extends React.Component {
     store.store = this.state;
   }
 
-  createTask(note, topic_uuid) {
-    if (note === null || note.length === 0) {
+  createTask(content, topicUuid) {
+    if (content === null || content.length === 0) {
       return;
     }
     const task = {
       uuid: uuid(),
-      topic_uuid,
-      note,
+      topicUuid,
+      content,
     };
     this.setState((state) => {
       const tasks = { ...state.tasks };
@@ -53,8 +56,8 @@ class App extends React.Component {
       const schedule = [...state.schedule];
       const topics = JSON.parse(JSON.stringify(state.topics));
 
-      if (topic_uuid != null) {
-        topics[topic_uuid].tasks.push(task.uuid);
+      if (topicUuid != null) {
+        topics[topicUuid].tasks.push(task.uuid);
       } else {
         schedule.push(task.uuid);
       }
@@ -67,15 +70,15 @@ class App extends React.Component {
     });
   }
 
-  updateTaskDate(task_uuid, date) {
-    if (task_uuid != null) {
+  updateTaskDate(taskUuid, date) {
+    if (taskUuid != null) {
       this.setState((state) => {
         const tasks = { ...state.tasks };
 
         if (date == null) {
-          delete tasks[task_uuid].date;
+          delete tasks[taskUuid].date;
         } else {
-          tasks[task_uuid].date = date;
+          tasks[taskUuid].date = date;
         }
 
         return {
@@ -85,13 +88,13 @@ class App extends React.Component {
     }
   }
 
-  updateTaskNote(task_uuid, note) {
-    if (note === null || note.length === 0) {
-      this.deleteTask(task_uuid);
+  updateTaskContent(taskUuid, content) {
+    if (content === null || content.length === 0) {
+      this.deleteTask(taskUuid);
     } else {
       this.setState((state) => {
         const tasks = { ...state.tasks };
-        tasks[task_uuid].note = note;
+        tasks[taskUuid].content = content;
 
         return {
           tasks,
@@ -100,23 +103,23 @@ class App extends React.Component {
     }
   }
 
-  deleteTask(task_uuid) {
-    if (task_uuid != null) {
+  deleteTask(taskUuid) {
+    if (taskUuid != null) {
       this.setState((state) => {
         const tasks = { ...state.tasks };
-        delete tasks[task_uuid];
+        delete tasks[taskUuid];
 
         const schedule = [...state.schedule];
-        const index = schedule.indexOf(task_uuid);
+        const index = schedule.indexOf(taskUuid);
         if (index !== -1) {
           schedule.splice(index, 1);
         }
 
-        const { topic_uuid } = state.tasks[task_uuid];
+        const { topicUuid } = state.tasks[taskUuid];
         const topics = JSON.parse(JSON.stringify(state.topics));
-        if (topic_uuid != null) {
-          topics[topic_uuid].tasks.splice(
-            topics[topic_uuid].tasks.indexOf(task_uuid),
+        if (topicUuid != null) {
+          topics[topicUuid].tasks.splice(
+            topics[topicUuid].tasks.indexOf(taskUuid),
             1
           );
         }
@@ -132,28 +135,32 @@ class App extends React.Component {
 
   createTopic(topic, color) {
     this.setState((state) => {
-      const topic_uuid = uuid();
+      const topicUuid = uuid();
       const topics = JSON.parse(JSON.stringify(state.topics));
+      const topicsOrder = [...state.topicsOrder];
 
-      topics[topic_uuid] = {
-        uuid: topic_uuid,
+      topics[topicUuid] = {
+        uuid: topicUuid,
         name: topic,
         color: color != null ? color : randomColor(),
         tasks: [],
       };
 
+      topicsOrder.push(topicUuid);
+
       return {
         topics,
+        topicsOrder,
       };
     });
   }
 
-  editTopic(topic_uuid, name, color) {
+  updateTopic(topicUuid, name, color) {
     this.setState((state) => {
       const topics = JSON.parse(JSON.stringify(state.topics));
 
-      topics[topic_uuid].name = name;
-      topics[topic_uuid].color = color;
+      topics[topicUuid].name = name;
+      topics[topicUuid].color = color;
 
       return {
         topics,
@@ -161,36 +168,40 @@ class App extends React.Component {
     });
   }
 
-  deleteTopic(topic_uuid) {
+  deleteTopic(topicUuid) {
     this.setState((state) => {
       const tasks = { ...state.tasks };
       const topics = JSON.parse(JSON.stringify(state.topics));
       const schedule = [...state.schedule];
+      const topicsOrder = [...state.topicsOrder];
 
-      topics[topic_uuid].tasks.forEach((task_uuid) => {
-        delete tasks[task_uuid];
+      topics[topicUuid].tasks.forEach((taskUuid) => {
+        delete tasks[taskUuid];
 
-        const index = schedule.indexOf(task_uuid);
+        const index = schedule.indexOf(taskUuid);
         if (index !== -1) {
           schedule.splice(index, 1);
         }
       });
 
-      delete topics[topic_uuid];
+      topicsOrder.splice(topicsOrder.indexOf(topicUuid), 1);
+
+      delete topics[topicUuid];
 
       return {
         tasks,
-        schedule,
         topics,
+        schedule,
+        topicsOrder,
       };
     });
   }
 
-  reorderTaskWithinTopic(topic_uuid, startIndex, endIndex) {
+  reorderTaskWithinTopic(topicUuid, startIndex, endIndex) {
     this.setState((state) => {
       const topics = JSON.parse(JSON.stringify(state.topics));
-      const [reorderedItem] = topics[topic_uuid].tasks.splice(startIndex, 1);
-      topics[topic_uuid].tasks.splice(endIndex, 0, reorderedItem);
+      const [reorderedItem] = topics[topicUuid].tasks.splice(startIndex, 1);
+      topics[topicUuid].tasks.splice(endIndex, 0, reorderedItem);
 
       return {
         topics,
@@ -210,21 +221,21 @@ class App extends React.Component {
     });
   }
 
-  changeTopic(task_uuid, new_topic_uuid, index) {
+  changeTopic(taskUuid, newTopicUuid, index) {
     this.setState((state) => {
       const tasks = JSON.parse(JSON.stringify(state.tasks));
-      const task = tasks[task_uuid];
+      const task = tasks[taskUuid];
       const topics = JSON.parse(JSON.stringify(state.topics));
 
-      if (task.topic_uuid != null) {
-        topics[task.topic_uuid].tasks.splice(
-          topics[task.topic_uuid].tasks.indexOf(task_uuid),
+      if (task.topicUuid != null) {
+        topics[task.topicUuid].tasks.splice(
+          topics[task.topicUuid].tasks.indexOf(taskUuid),
           1
         );
       }
 
-      tasks[task_uuid].topic_uuid = new_topic_uuid;
-      topics[new_topic_uuid].tasks.splice(index, 0, task_uuid);
+      tasks[taskUuid].topicUuid = newTopicUuid;
+      topics[newTopicUuid].tasks.splice(index, 0, taskUuid);
 
       return {
         tasks,
@@ -236,9 +247,10 @@ class App extends React.Component {
   handleOnDragEnd(result) {
     if (!result.destination) return;
 
+    const taskUuid = result.draggableId.split(":")[1];
+
     if (result.source.droppableId === "schedule") {
-      const task_uuid = result.draggableId.slice("schedule:".length);
-      const { topic_uuid } = this.state.tasks[task_uuid];
+      const { topicUuid } = this.state.tasks[taskUuid];
 
       if (result.destination.droppableId === "schedule") {
         this.reorderScheduledTask(
@@ -248,39 +260,38 @@ class App extends React.Component {
       } else {
         this.setState((state) => {
           const schedule = [...state.schedule];
-          schedule.splice(schedule.indexOf(task_uuid), 1);
+          schedule.splice(schedule.indexOf(taskUuid), 1);
 
           return {
             schedule,
           };
         });
 
-        if (topic_uuid === result.destination.droppableId) {
-          const startIndex = this.state.topics[topic_uuid].tasks.indexOf(
-            task_uuid
+        if (topicUuid === result.destination.droppableId) {
+          const startIndex = this.state.topics[topicUuid].tasks.indexOf(
+            taskUuid
           );
           let endIndex = result.destination.index;
           if (endIndex > startIndex) {
             endIndex--;
           }
-          this.reorderTaskWithinTopic(topic_uuid, startIndex, endIndex);
+          this.reorderTaskWithinTopic(topicUuid, startIndex, endIndex);
         } else {
           this.changeTopic(
-            task_uuid,
+            taskUuid,
             result.destination.droppableId,
             result.destination.index
           );
         }
       }
     } else {
-      const task_uuid = result.draggableId;
       if (result.destination.droppableId === "schedule") {
-        const startIndex = this.state.schedule.indexOf(task_uuid);
+        const startIndex = this.state.schedule.indexOf(taskUuid);
         let endIndex = result.destination.index;
         if (startIndex < 0) {
           this.setState((state) => {
             const schedule = [...state.schedule];
-            schedule.splice(endIndex, 0, task_uuid);
+            schedule.splice(endIndex, 0, taskUuid);
 
             return {
               schedule,
@@ -300,7 +311,7 @@ class App extends React.Component {
         );
       } else {
         this.changeTopic(
-          task_uuid,
+          taskUuid,
           result.destination.droppableId,
           result.destination.index
         );
@@ -312,32 +323,28 @@ class App extends React.Component {
     return (
       <div className="App">
         <DragDropContext onDragEnd={this.handleOnDragEnd}>
-          <div id="schedule" className="scroll-enabled">
-            <h1>Schedule</h1>
-            <Schedule
-              tasks={this.state.tasks}
-              schedule={this.state.schedule}
-              topics={this.state.topics}
-              createTask={this.createTask}
-              updateTaskDate={this.updateTaskDate}
-              updateTaskNote={this.updateTaskNote}
-              deleteTask={this.deleteTask}
-            />
-          </div>
-          <div id="topics" className="scroll-enabled">
-            <h1>Lists</h1>
-            <TopicList
-              tasks={this.state.tasks}
-              topics={this.state.topics}
-              createTask={this.createTask}
-              updateTaskDate={this.updateTaskDate}
-              updateTaskNote={this.updateTaskNote}
-              deleteTask={this.deleteTask}
-              createTopic={this.createTopic}
-              editTopic={this.editTopic}
-              deleteTopic={this.deleteTopic}
-            />
-          </div>
+          <Schedule
+            tasks={this.state.tasks}
+            tasksOrder={this.state.schedule}
+            topics={this.state.topics}
+            createTask={this.createTask}
+            updateTaskDate={this.updateTaskDate}
+            updateTaskCote={this.updateTaskContent}
+            deleteTask={this.deleteTask}
+          />
+
+          <TopicList
+            tasks={this.state.tasks}
+            topics={this.state.topics}
+            topicsOrder={this.state.topicsOrder}
+            createTask={this.createTask}
+            updateTaskDate={this.updateTaskDate}
+            updateTaskContent={this.updateTaskContent}
+            deleteTask={this.deleteTask}
+            createTopic={this.createTopic}
+            updateTopic={this.updateTopic}
+            deleteTopic={this.deleteTopic}
+          />
         </DragDropContext>
       </div>
     );

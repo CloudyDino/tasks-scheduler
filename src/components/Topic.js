@@ -1,9 +1,8 @@
 import React from "react";
-import { Draggable, Droppable } from "react-beautiful-dnd";
 import { randomColor } from "../util/colors";
 import AddTaskButton from "./AddTaskButton";
 import "./css/Topic.css";
-import { Task } from "./Task";
+import { TaskList } from "./TaskList";
 
 export class Topic extends React.Component {
   constructor(props) {
@@ -28,8 +27,8 @@ export class Topic extends React.Component {
     this.setState({ addTask: false });
   }
 
-  createTask(note) {
-    this.props.createTask(note, this.props.topic.uuid);
+  createTask(content) {
+    this.props.createTask(content, this.props.topic.uuid);
   }
 
   deleteTopic() {
@@ -37,7 +36,7 @@ export class Topic extends React.Component {
   }
 
   adjustTopicColor() {
-    this.props.editTopic(
+    this.props.updateTopic(
       this.props.topic.uuid,
       this.props.topic.name,
       randomColor()
@@ -45,53 +44,27 @@ export class Topic extends React.Component {
   }
 
   render() {
+    let topics = {};
+    topics[this.props.topic.uuid] = this.props.topic;
+
     return (
       <div
         className="topic"
         style={{ backgroundColor: this.props.topic.color }}
       >
         <p>{this.props.topic.name}</p>
-        <Droppable droppableId={this.props.topic.uuid}>
-          {(provided) => (
-            <div
-              className="container scroll-enabled"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {this.props.topic.tasks.map((task_uuid, index) => (
-                <Draggable
-                  key={task_uuid}
-                  draggableId={task_uuid}
-                  index={index}
-                >
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                    >
-                      <Task
-                        task={this.props.tasks[task_uuid]}
-                        updateTaskDate={this.props.updateTaskDate}
-                        updateTaskNote={this.props.updateTaskNote}
-                        deleteTask={this.props.deleteTask}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-              {this.state.addTask ? (
-                <Task
-                  createTask={this.createTask}
-                  onCancel={this.stopAddingTask}
-                />
-              ) : (
-                ""
-              )}
-            </div>
-          )}
-        </Droppable>
+        <TaskList
+          id={this.props.topic.uuid}
+          topics={topics}
+          tasksOrder={this.props.topic.tasks}
+          tasks={this.props.tasks}
+          createTask={this.createTask}
+          updateTaskDate={this.props.updateTaskDate}
+          updateTaskContent={this.props.updateTaskContent}
+          deleteTask={this.props.deleteTask}
+          addTask={this.state.addTask}
+          onCancelAddingTask={this.stopAddingTask}
+        />
         <div className="topic-actions">
           <button
             aria-label="Change Topic Color"

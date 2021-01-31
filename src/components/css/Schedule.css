@@ -1,19 +1,12 @@
-#schedule,
-.schedule {
+#schedule {
+  padding: 2em 1em 1em 2em;
+  min-width: min-content;
+  flex: 1 0 0;
   display: flex;
   flex-direction: column;
 }
 
-.schedule {
-  flex-grow: 1;
-}
-
-.schedule-list {
-  flex-grow: 1;
-  min-height: 2em;
-}
-
-.schedule .add-task-button {
+#schedule .add-task-button {
   margin-left: auto;
   margin-right: auto;
 }
