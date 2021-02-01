@@ -86,9 +86,9 @@ export class Task extends React.Component {
       >
         {(provided) => (
           <div
-            ref={provided.innerRef}
             {...provided.draggableProps}
             {...provided.dragHandleProps}
+            ref={provided.innerRef}
             className="task-container"
           >
             <div className="task" style={{ backgroundColor: this.props.color }}>

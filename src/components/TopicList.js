@@ -1,4 +1,5 @@
 import React from "react";
+import { Droppable } from "react-beautiful-dnd";
 import { randomColor } from "../util/colors";
 import AddTopicButton from "./AddTopicButton";
 import "./css/TopicList.css";
@@ -50,40 +51,53 @@ export class TopicList extends React.Component {
     return (
       <div id="topics" className="scroll-enabled">
         <h1>Lists</h1>
-        <div className="topic-grid">
-          {this.props.topicsOrder.map((topicUuid, index) => (
-            <Topic
-              key={topicUuid}
-              topic={this.props.topics[topicUuid]}
-              tasks={this.props.tasks}
-              createTask={this.props.createTask}
-              updateTaskDate={this.props.updateTaskDate}
-              updateTaskContent={this.props.updateTaskContent}
-              deleteTask={this.props.deleteTask}
-              updateTopic={this.props.updateTopic}
-              deleteTopic={this.props.deleteTopic}
-            />
-          ))}
-
-          {this.state.addTopic ? (
+        <Droppable droppableId="topic-list" direction="grid" type="topic">
+          {(provided) => (
             <div
-              className="topic"
-              style={{ backgroundColor: this.state.color }}
+              className="topic-grid"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
             >
-              <textarea
-                autoFocus
-                className="add-topic-text"
-                placeholder="Add Topic"
-                onKeyDown={this.addTopicKeyDown}
-                onBlur={this.stopAddingTopic}
-                rows="1"
-              />
+              {this.props.topicsOrder.map((topicUuid, index) => (
+                <Topic
+                  key={topicUuid}
+                  index={index}
+                  topic={this.props.topics[topicUuid]}
+                  tasks={this.props.tasks}
+                  createTask={this.props.createTask}
+                  updateTaskDate={this.props.updateTaskDate}
+                  updateTaskContent={this.props.updateTaskContent}
+                  deleteTask={this.props.deleteTask}
+                  updateTopic={this.props.updateTopic}
+                  deleteTopic={this.props.deleteTopic}
+                />
+              ))}
+
+              {provided.placeholder}
+
+              {this.state.addTopic ? (
+                <div
+                  key="newTopic"
+                  className="topic"
+                  style={{ backgroundColor: this.state.color }}
+                >
+                  <textarea
+                    autoFocus
+                    className="add-topic-text"
+                    placeholder="Add Topic"
+                    onKeyDown={this.addTopicKeyDown}
+                    onBlur={this.stopAddingTopic}
+                    rows="1"
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+
+              <AddTopicButton onClick={this.addTopic} />
             </div>
-          ) : (
-            ""
           )}
-          <AddTopicButton onClick={this.addTopic} />
-        </div>
+        </Droppable>
       </div>
     );
   }

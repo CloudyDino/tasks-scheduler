@@ -6,7 +6,7 @@ import "./css/TaskList.css";
 export class TaskList extends React.Component {
   render() {
     return (
-      <Droppable droppableId={this.props.id}>
+      <Droppable droppableId={this.props.id} type="task">
         {(provided) => (
           <div
             className="task-list scroll-enabled"

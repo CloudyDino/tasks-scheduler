@@ -245,17 +245,28 @@ class App extends React.Component {
   }
 
   handleOnDragEnd(result) {
-    if (!result.destination) return;
+    if (!result.destination) {
+      return;
+    }
+    if (result.type === "task") {
+      this.handleOnDragTaskEnd(result);
+    } else if (result.type === "topic") {
+      this.handleOnDragTopicEnd(result);
+    }
+  }
 
-    const taskUuid = result.draggableId.split(":")[1];
+  handleOnDragTaskEnd(result) {
+    const { destination, source, draggableId } = result;
 
-    if (result.source.droppableId === "schedule") {
+    const taskUuid = draggableId.split(":")[1];
+
+    if (source.droppableId === "schedule") {
       const { topicUuid } = this.state.tasks[taskUuid];
 
-      if (result.destination.droppableId === "schedule") {
+      if (destination.droppableId === "schedule") {
         this.reorderScheduledTask(
-          result.source.index,
-          result.destination.index
+          source.index,
+          destination.index
         );
       } else {
         this.setState((state) => {
@@ -267,11 +278,11 @@ class App extends React.Component {
           };
         });
 
-        if (topicUuid === result.destination.droppableId) {
+        if (topicUuid === destination.droppableId) {
           const startIndex = this.state.topics[topicUuid].tasks.indexOf(
             taskUuid
           );
-          let endIndex = result.destination.index;
+          let endIndex = destination.index;
           if (endIndex > startIndex) {
             endIndex--;
           }
@@ -279,15 +290,15 @@ class App extends React.Component {
         } else {
           this.changeTopic(
             taskUuid,
-            result.destination.droppableId,
-            result.destination.index
+            destination.droppableId,
+            destination.index
           );
         }
       }
     } else {
-      if (result.destination.droppableId === "schedule") {
+      if (destination.droppableId === "schedule") {
         const startIndex = this.state.schedule.indexOf(taskUuid);
-        let endIndex = result.destination.index;
+        let endIndex = destination.index;
         if (startIndex < 0) {
           this.setState((state) => {
             const schedule = [...state.schedule];
@@ -303,20 +314,34 @@ class App extends React.Component {
           }
           this.reorderScheduledTask(startIndex, endIndex);
         }
-      } else if (result.source.droppableId === result.destination.droppableId) {
+      } else if (source.droppableId === destination.droppableId) {
         this.reorderTaskWithinTopic(
-          result.source.droppableId,
-          result.source.index,
-          result.destination.index
+          source.droppableId,
+          source.index,
+          destination.index
         );
       } else {
         this.changeTopic(
           taskUuid,
-          result.destination.droppableId,
-          result.destination.index
+          destination.droppableId,
+          destination.index
         );
       }
     }
+  }
+
+  handleOnDragTopicEnd(result) {
+    const { destination, source } = result;
+
+    this.setState((state) => {
+      const topicsOrder = [...state.topicsOrder];
+      const [reorderedItem] = topicsOrder.splice(source.index, 1);
+      topicsOrder.splice(destination.index, 0, reorderedItem);
+
+      return {
+        topicsOrder,
+      };
+    });
   }
 
   render() {
