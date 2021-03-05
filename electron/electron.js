@@ -56,6 +56,9 @@ function createWindow() {
 function createTray() {
   tray = new Tray(getIconPath());
   tray.setToolTip("Task Scheduler");
+  tray.on("click", () => {
+    window.show();
+  })
   tray.setContextMenu(
     Menu.buildFromTemplate([
       {
