@@ -1,10 +1,11 @@
 const path = require("path");
 
-const { app, BrowserWindow, nativeTheme } = require("electron");
+const { app, BrowserWindow, Tray, Menu } = require("electron");
 const isDev = require("electron-is-dev");
+const process = require("process");
 
 // Conditionally include the dev tools installer to load React Dev Tools
-let installExtension, REACT_DEVELOPER_TOOLS;
+let window, tray, isQuiting, installExtension, REACT_DEVELOPER_TOOLS;
 
 if (isDev) {
   const devTools = require("electron-devtools-installer");
@@ -18,28 +19,71 @@ if (require("electron-squirrel-startup")) {
 }
 
 function createWindow() {
-  // Create the browser window.
-  const win = new BrowserWindow({
+  window = new BrowserWindow({
     autoHideMenuBar: true,
-    backgroundColor: nativeTheme.shouldUseDarkColors ? "#171a1d" : "#f4f4f4",
+    backgroundColor: "#171a1d",
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
     },
   });
 
-  // and load the index.html of the app.
-  // win.loadFile("index.html");
-  win.loadURL(
+  window.loadURL(
     isDev
       ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`
+      : `file://${path.join(__dirname, "../build/", getIcon())}`
   );
 
   // Open the DevTools.
-  if (isDev) {
-    win.webContents.openDevTools({ mode: "bottom" });
+  window.webContents.on("did-frame-finish-load", () => {
+    if (isDev) {
+      window.webContents.openDevTools({ mode: "bottom" });
+      installExtension(REACT_DEVELOPER_TOOLS)
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((error) => console.log(`An error occurred: , ${error}`));
+    }
+  });
+
+  window.on("close", function (event) {
+    if (!isQuiting) {
+      event.preventDefault();
+      window.hide();
+      event.returnValue = false;
+    }
+  });
+}
+
+function createTray() {
+  tray = new Tray(getIconPath());
+  tray.setToolTip("Task Scheduler");
+  tray.setContextMenu(
+    Menu.buildFromTemplate([
+      {
+        label: "Open",
+        click: () => {
+          window.show();
+        },
+      },
+      {
+        label: "Quit",
+        click: () => {
+          isQuiting = true;
+          app.quit();
+        },
+      },
+    ])
+  );
+}
+
+function getIcon() {
+  if (process.platform === "win32") {
+    return "favicon.ico";
   }
+  return "logo256.png";
+}
+
+function getIconPath() {
+  return path.join(__dirname, "../build/", getIcon());
 }
 
 // This method will be called when Electron has finished
@@ -47,21 +91,7 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-
-  if (isDev) {
-    installExtension(REACT_DEVELOPER_TOOLS)
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((error) => console.log(`An error occurred: , ${error}`));
-  }
-});
-
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  createTray();
 });
 
 app.on("activate", () => {
