@@ -6,6 +6,8 @@ A To-Do app inspired by Moleskine Actions in order to learn ReactJs and Electron
 
 To install, go to the [releases page](https://github.com/CloudyDino/tasks-scheduler/releases) and select the most recent version. Then downloaded and run the setup installer for your system (`.exe` for Windows).
 
+![screenshot](./screenshots/screenshot.png)
+
 ## Available Scripts
 
 In the project directory, you can run:
